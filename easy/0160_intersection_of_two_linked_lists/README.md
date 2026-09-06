@@ -307,3 +307,23 @@ Output:
 - 142. Linked List Cycle II
 - 206. Reverse Linked List
 - 876. Middle of the Linked List
+# 🚀 LeetCode 160 - Intersection of Two Linked Lists
+
+## 📝 Problem
+
+Given the heads of two singly linked lists `headA` and `headB`, return the node at which the two lists intersect.
+
+If the two linked lists have no intersection, return `null`.
+
+The intersection is based on the actual node reference, not the node value.
+
+---
+
+## Example 1
+
+```text
+A: 4 → 1 ─┐
+          ↓
+          8 → 4 → 5
+          ↑
+B: 5 → 6 → 1 ─┘
