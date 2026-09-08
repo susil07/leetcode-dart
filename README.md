@@ -8,10 +8,10 @@ A collection of my **LeetCode** solutions written in **Dart** to improve Data St
 
 | Difficulty | Solved |
 | :--------- | -----: |
-| 🟢 Easy    | 26 |
+| 🟢 Easy    | 36 |
 | 🟡 Medium  | 2 |
 | 🔴 Hard    | 0 |
-| **Total**  | **28** |
+| **Total**  | **38** |
 
 ---
 
@@ -37,8 +37,8 @@ leetcode-dart/
 - [x] Stack
 - [x] Two Pointers
 - [ ] Queue
-- [ ] Binary Search
-- [ ] Trees
+- [x] Binary Search
+- [x] Trees
 - [ ] Graphs
 - [ ] Heap / Priority Queue
 - [ ] Backtracking
