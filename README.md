@@ -46,6 +46,24 @@ leetcode-dart/
 
 ---
 
+## 📖 Revision Notes & Theory
+
+Master reference notes for patterns, complexities, and optimization:
+
+- 🧠 [Universal Problem-Solving Framework](notes/problem_solving_framework.md)
+- 🗺️ [Master Pattern Decision Tree & 18 Patterns](notes/master_patterns_cheat_sheet.md)
+- ⏱️ [Time & Space Complexity Handbook](notes/complexity_analysis.md)
+- 🧭 [DSA Master Roadmap & Gap Analysis](notes/roadmap.md)
+- 📊 [Arrays & Two Pointers](notes/arrays.md)
+- 🔤 [Strings & Character Manipulation](notes/strings.md)
+- 🗺️ [HashMap & HashSet](notes/hash_map.md)
+- 🔗 [Linked Lists & Fast/Slow Pointers](notes/linked_list.md)
+- 🥞 [Stacks & Parentheses](notes/stack.md)
+- 🔍 [Binary Search](notes/binary_search.md)
+- 🌳 [Trees & Binary Search Trees](notes/trees.md)
+
+---
+
 ## 📝 Repository Format
 
 Each problem contains:
