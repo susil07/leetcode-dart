@@ -1,41 +1,84 @@
-# LeetCode Dart Solutions
-# 0001. Two Sum
-<!-- ⌘ + ⇧ + V -->
-- **Difficulty:** Easy
-- **Category:** Array, HashMap
-- **Language:** Dart
+# 🚀 LeetCode 0001 - Two Sum
+
+## 📝 Problem Statement
+
+Given an array of integers `nums` and an integer `target`, return **indices of the two numbers** such that they add up to `target`.
+
+You may assume that each input would have **exactly one solution**, and you may not use the same element twice.
+
+You can return the answer in any order.
 
 ---
 
-# Problem Statement
+## 🔒 Constraints
 
-Given an array of integers `nums` and an integer `target`, return the **indices** of the two numbers such that they add up to the target.
+- $2 \le \text{nums.length} \le 10^4$
+- $-10^9 \le \text{nums}[i] \le 10^9$
+- $-10^9 \le \text{target} \le 10^9$
+- **Only one valid answer exists.**
 
-You may assume that each input has exactly one solution, and you may not use the same element twice.
+---
 
-## Example
+## Examples
+
+### Example 1:
+**Input:** `nums = [2, 7, 11, 15], target = 9`  
+**Output:** `[0, 1]`  
+*Explanation:* Because `nums[0] + nums[1] == 9`, we return `[0, 1]`.
+
+---
+
+### Example 2:
+**Input:** `nums = [3, 2, 4], target = 6`  
+**Output:** `[1, 2]`  
+*Explanation:* Because `nums[1] + nums[2] == 6`, we return `[1, 2]`.
+
+---
+
+### Example 3:
+**Input:** `nums = [3, 3], target = 6`  
+**Output:** `[0, 1]`  
+
+---
+
+# 🧠 Evolution of Solutions: How We Make It Better
 
 ```text
-Input:
-nums = [2,7,11,15]
-target = 9
-
-Output:
-[0,1]
-```
-
-Explanation:
-
-```text
-nums[0] + nums[1] = 2 + 7 = 9
+┌────────────────────────────────────────────────────────────────────────┐
+│  1. Brute Force (Nested Loops)                                         │
+│     • Check every possible pair (i, j) with i < j                      │
+│     • Time: O(N^2) | Space: O(1)                                       │
+│     • Bottleneck: For every element x, scans remaining array in O(N)   │
+└──────────────────────────────────┬─────────────────────────────────────┘
+                                   │
+                                   ▼ Trade Space for Time (O(1) Lookup)
+┌────────────────────────────────────────────────────────────────────────┐
+│  2. Two-Pass Hash Map                                                  │
+│     • Pass 1: Put all (num -> index) into a Map                        │
+│     • Pass 2: Check if (target - num) exists in Map and index != i     │
+│     • Time: O(N) | Space: O(N)                                         │
+│     • Bottleneck: 2 passes + duplicate elements can overwrite map keys │
+└──────────────────────────────────┬─────────────────────────────────────┘
+                                   │
+                                   ▼ Combine Insertion & Search in 1 Pass
+┌────────────────────────────────────────────────────────────────────────┐
+│  3. One-Pass Hash Map (Optimal Solution)                               │
+│     • Check if complement exists in Map BEFORE inserting current num   │
+│     • Time: O(N) | Space: O(N)                                         │
+│     • Improvement: 1 single pass, zero duplicate overwrite issues      │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-# Solution (Brute Force)
+# 💻 Solutions
+
+## 1. Approach 1: Brute Force ($O(N^2)$ Time, $O(1)$ Space)
+
+Check every possible pair of numbers using two nested loops:
 
 ```dart
-class Solution {
+class SolutionBruteForce {
   List<int> twoSum(List<int> nums, int target) {
     for (int i = 0; i < nums.length; i++) {
       for (int j = i + 1; j < nums.length; j++) {
@@ -49,404 +92,155 @@ class Solution {
 }
 ```
 
----
-
-# Technique Used
-
-**Brute Force**
-
-A brute force approach means trying every possible combination until the correct answer is found.
-
-For this problem, we compare every pair of numbers in the array.
+### 🔴 Bottlenecks:
+- **Time Complexity:** $O(N^2)$ — Total comparisons: $\frac{N(N-1)}{2}$. For $N = 10^4$, this requires $\approx 5 \times 10^7$ iterations.
+- For each number `x`, we linearly scan the rest of the array just to ask: *"Does `target - x` exist?"*
 
 ---
 
-# Algorithm
+## 2. Approach 2: Two-Pass Hash Map ($O(N)$ Time, $O(N)$ Space)
 
-1. Start from the first element.
-2. Compare it with every element after it.
-3. If their sum equals the target, return their indices.
-4. Otherwise, continue checking all remaining pairs.
-5. If no pair is found, return an empty list.
+### 💡 How We Make It Better:
+A **Hash Map** provides average **$O(1)$ lookup time**.
+Instead of scanning the array linearly to find the complement, we can store values in a Map:
 
----
-
-# Dry Run
-
-Input
-
-```text
-nums = [2,7,11,15]
-target = 9
-```
-
-### Iteration 1
-
-```text
-i = 0
-
-nums[i] = 2
-
-j = 1
-
-nums[j] = 7
-
-2 + 7 = 9 ✅
-```
-
-Return
-
-```text
-[0,1]
-```
-
----
-
-Suppose
-
-```text
-nums = [2,7,11,15]
-target = 26
-```
-
-The algorithm checks
-
-```text
-2 + 7
-2 + 11
-2 + 15
-7 + 11
-7 + 15
-11 + 15
-```
-
-Eventually,
-
-```text
-11 + 15 = 26
-```
-
-Return
-
-```text
-[2,3]
-```
-
----
-
-# Why do we use `j = i + 1`?
-
-Instead of
+1. **Pass 1**: Store every element and its index in a `Map<int, int>`.
+2. **Pass 2**: Iterate through `nums` and check if `complement = target - nums[i]` exists in the Map **and** is not the same index (`map[complement] != i`).
 
 ```dart
-for (int j = 0; j < nums.length; j++)
+class SolutionTwoPassMap {
+  List<int> twoSum(List<int> nums, int target) {
+    final Map<int, int> map = {};
+
+    // Pass 1: Populate map
+    for (int i = 0; i < nums.length; i++) {
+      map[nums[i]] = i;
+    }
+
+    // Pass 2: Check for complement
+    for (int i = 0; i < nums.length; i++) {
+      final complement = target - nums[i];
+      if (map.containsKey(complement) && map[complement] != i) {
+        return [i, map[complement]!];
+      }
+    }
+
+    return [];
+  }
+}
 ```
 
-we use
+### 🟢 Improvements Over Approach 1:
+- Time drops from **$O(N^2)$ to $O(N)$**.
+
+### 🔴 Remaining Issues:
+- Requires **two full traversals** of the array.
+- Duplicate keys (e.g. `[3, 3]` with target `6`) overwrite the earlier index in Pass 1, which requires extra care.
+
+---
+
+## 3. Approach 3: One-Pass Hash Map (Most Optimal: $O(N)$ Time, $O(N)$ Space)
+
+### 💡 How We Make It Better:
+Can we find the pair in **just one single pass**?
+
+Yes! As we iterate through the array:
+1. Calculate `complement = target - nums[i]`.
+2. Check if `complement` is **already in our map** (i.e. seen in an earlier index).
+3. If it exists $\rightarrow$ **return `[map[complement]!, i]` immediately!**
+4. If not $\rightarrow$ insert `map[nums[i]] = i` and continue.
 
 ```dart
-for (int j = i + 1; j < nums.length; j++)
+class Solution {
+  List<int> twoSum(List<int> nums, int target) {
+    // Map to store: number -> its index
+    final Map<int, int> numToIndex = {};
+
+    for (int i = 0; i < nums.length; i++) {
+      final complement = target - nums[i];
+
+      // If the complement has already been seen, we found our pair!
+      if (numToIndex.containsKey(complement)) {
+        return [numToIndex[complement]!, i];
+      }
+
+      // Record current number for future lookups
+      numToIndex[nums[i]] = i;
+    }
+
+    return [];
+  }
+}
 ```
 
-### Reason 1
+### 🧪 Step-by-Step Dry Run (`nums = [2, 7, 11, 15], target = 9`):
 
-Avoid comparing the same element with itself.
+| Step | `i` | `nums[i]` | `complement` (`9 - nums[i]`) | Map Contents (`numToIndex`) | Complement in Map? | Action |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **1** | `0` | `2` | `7` | `{}` | ❌ No | Add `2 -> 0` to map |
+| **2** | `1` | `7` | `2` | `{2: 0}` | ✅ **Yes!** (at index `0`) | **Return `[0, 1]`** 🎉 |
 
-Example
-
-```text
-2 + 2
-```
-
-This is not allowed because we cannot use the same element twice.
-
----
-
-### Reason 2
-
-Avoid duplicate comparisons.
-
-Without `i + 1`
-
-```text
-2 + 7
-7 + 2
-```
-
-Both are the same pair.
-
-Using `i + 1` ensures each pair is checked only once.
+### 🟢 Why One-Pass is Superior:
+1. **Single Pass**: Solves the problem in a single traversal, often finishing well before reaching the end of the array.
+2. **Naturally Handles Duplicates**: For `nums = [3, 3], target = 6`:
+   - At `i = 0`: `nums[0] = 3`, complement `3` is not yet in map $\rightarrow$ insert `{3: 0}`.
+   - At `i = 1`: `nums[1] = 3`, complement `3` **is** in map at index `0` $\rightarrow$ returns `[0, 1]` immediately before any key collision occurs!
 
 ---
 
-# Time Complexity
+## 4. Approach 4: Sorting + Two Pointers ($O(N \log N)$ Time, $O(N)$ Space)
 
-There are two nested loops.
+If the array were already sorted (as in **LeetCode 167: Two Sum II**), we could use **Two Pointers** in $O(1)$ space.
+However, because here we must return the **original indices**, sorting requires tracking original indices with extra pairs:
 
-Outer loop runs
+```dart
+class SolutionTwoPointers {
+  List<int> twoSum(List<int> nums, int target) {
+    // Pair each number with its original index
+    final indexedNums = List.generate(nums.length, (i) => [nums[i], i]);
 
-```text
-n
-```
+    // Sort by value: O(N log N)
+    indexedNums.sort((a, b) => a[0].compareTo(b[0]));
 
-times.
+    int left = 0;
+    int right = nums.length - 1;
 
-Inner loop runs
+    while (left < right) {
+      final currentSum = indexedNums[left][0] + indexedNums[right][0];
 
-```text
-n-1
-n-2
-n-3
-...
-1
-```
+      if (currentSum == target) {
+        return [indexedNums[left][1], indexedNums[right][1]];
+      } else if (currentSum < target) {
+        left++;
+      } else {
+        right--;
+      }
+    }
 
-Total comparisons
-
-```text
-(n-1) + (n-2) + ... + 1
-
-= n(n-1)/2
-```
-
-Ignoring constants,
-
-```text
-Time Complexity = O(n²)
+    return [];
+  }
+}
 ```
 
 ---
 
-# Space Complexity
+# 📊 Comprehensive Comparison Matrix
 
-Extra memory used:
-
-```text
-i
-j
-```
-
-Only two integer variables are created.
-
-No extra array.
-
-No HashMap.
-
-No Stack.
-
-No Queue.
-
-Therefore,
-
-```text
-Space Complexity = O(1)
-```
-
-This is called **Constant Space**.
+| Metric | 1. Brute Force | 2. Two-Pass Hash Map | 3. One-Pass Hash Map (Optimal) | 4. Sorting + Two Pointers |
+| :--- | :--- | :--- | :--- | :--- |
+| **Time Complexity** | $O(N^2)$ | $O(N)$ | **$O(N)$** | $O(N \log N)$ |
+| **Space Complexity** | **$O(1)$** | $O(N)$ | **$O(N)$** | $O(N)$ (index tracking) |
+| **Number of Passes** | $\frac{N(N-1)}{2}$ comparisons | 2 passes | **1 single pass** | 1 sort + 1 scan |
+| **Handles Duplicates** | Trivial | Needs `index != i` check | **Seamless (auto-resolved)** | Handled |
+| **Interview Rating** | ⚠️ Naive Baseline | 👍 Good intermediate | 🏆 **Gold Standard** | 💡 Great follow-up discussion |
 
 ---
 
-# Why don't we count the input array?
-
-The input array is provided by the caller.
-
-Space Complexity only measures the **extra memory** created by our algorithm.
-
-So,
-
-```text
-nums
-```
-
-is **not counted**.
-
-Only
-
-```text
-i
-j
-```
-
-are counted.
-
----
-
-# Visualization
-
-```text
-Index
-
-0    1    2    3
-
-↓
-
-2    7    11   15
-
-│
-├────────► 7
-├────────────────► 11
-└────────────────────────► 15
-
-Then
-
-7
-├────────►11
-└────────────────►15
-
-Then
-
-11
-└────────►15
-```
-
-Every element is compared with all elements after it.
-
----
-
-# Advantages
-
-- Easy to understand.
-- Easy to implement.
-- Uses constant extra memory.
-- Good starting solution during interviews.
-
----
-
-# Disadvantages
-
-- Slow for large inputs.
-- Performs many unnecessary comparisons.
-- Not the optimal solution.
-
----
-
-# Optimization
-
-Instead of checking every pair, we can store previously visited numbers in a **HashMap**.
-
-Example
-
-```text
-Map
-
-2 -> 0
-7 -> 1
-11 -> 2
-```
-
-When visiting
-
-```text
-15
-```
-
-Compute
-
-```text
-target - current
-
-26 - 15 = 11
-```
-
-Since `11` already exists in the map,
-
-return
-
-```text
-[2,3]
-```
-
-immediately.
-
----
-
-# Optimized Technique
-
-**HashMap**
-
----
-
-# Optimized Complexity
-
-| Complexity | Value |
-|------------|-------|
-| Time | O(n) |
-| Space | O(n) |
-
----
-
-# Key Concepts Learned
-
-- Brute Force
-- Nested Loops
-- Array Traversal
-- Pair Comparison
-- Time Complexity
-- Space Complexity
-- HashMap Optimization
-
----
-
-# Interview Questions
-
-### What technique is used?
-
-Brute Force.
-
----
-
-### Why use nested loops?
-
-To compare every possible pair.
-
----
-
-### Why start `j` from `i + 1`?
-
-- Avoid comparing an element with itself.
-- Avoid duplicate pairs.
-
----
-
-### Why is Time Complexity O(n²)?
-
-Because every element is compared with almost every other element.
-
----
-
-### Why is Space Complexity O(1)?
-
-Only two integer variables (`i` and `j`) are used.
-
----
-
-### Can this solution be optimized?
-
-Yes.
-
-Using a HashMap, the Time Complexity becomes **O(n)**.
-
----
-
-# Final Complexity
-
-| Property | Value |
-|----------|-------|
-| Technique | Brute Force |
-| Data Structure | Array |
-| Time Complexity | O(n²) |
-| Space Complexity | O(1) |
-| Optimized Technique | HashMap |
-| Optimized Time | O(n) |
-| Optimized Space | O(n) |
-
----
-
-# Takeaway
-
-This problem teaches one of the most common interview patterns:
-
-1. Solve the problem using **Brute Force**.
-2. Analyze **Time Complexity** and **Space Complexity**.
-3. Identify repeated work.
-4. Use an appropriate **Data Structure (HashMap)** to optimize the solution from **O(n²)** to **O(n)**.
+# ⚠️ Key Interview Gotchas & Edge Cases
+
+1. **Cannot Use Same Element Twice**:
+   If `nums = [3, 2, 4]` and `target = 6`, returning `[0, 0]` because `3 + 3 = 6` is **wrong**. In the one-pass approach, we check the map *before* adding the current element, completely preventing self-pairing.
+2. **Duplicate Values**:
+   `nums = [3, 3], target = 6` $\rightarrow$ both numbers have the same value. The one-pass hash map finds the first `3` at index `0` when processing the second `3` at index `1`.
+3. **Negative Numbers & Zero**:
+   `nums = [-3, 4, 3, 90], target = 0` $\rightarrow$ `complement = 0 - (-3) = 3`. Subtraction handles signs naturally without any special casing.
