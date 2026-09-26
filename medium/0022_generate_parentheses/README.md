@@ -71,12 +71,12 @@ Output: ["(())", "()()"]
                                    │
                                    ▼ Pre-Allocated Contiguous Byte Buffer
 ┌────────────────────────────────────────────────────────────────────────┐
-│  4. High-Throughput Byte Buffer Backtracking (Optimal Dart Solution)   │
-│     • Use pre-allocated Uint8List(2 * n) as a mutable stack            │
+│  4. High-Throughput Pre-Allocated Buffer (Optimal Dart Solution)       │
+│     • Use pre-allocated List<int>.filled(2 * n, 0) as a code buffer    │
 │     • In-place index tracking: index = openCount + closeCount          │
 │     • String.fromCharCodes(buffer) constructs native string at leaf    │
 │     • Time: O(4^n / sqrt(n)) | Space: O(n) Stack Space                 │
-│     • 4.5x - 10x faster execution; zero intermediate heap allocations! │
+│     • Zero external imports needed; zero intermediate heap allocations!│
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -232,22 +232,20 @@ class SolutionBacktracking {
 
 ---
 
-## 4. Approach 4: High-Throughput Pre-Allocated Byte Buffer (Optimal)
+## 4. Approach 4: High-Throughput Pre-Allocated Buffer (Optimal Dart Solution)
 
 ### 💡 How We Make It Better:
-1. Replace `List<String> path` with `Uint8List(2 * n)`.
+1. Replace `List<String> path` with `List<int>.filled(2 * n, 0)` (ASCII code-unit buffer).
 2. The current recursion depth `index` directly indexes `buffer[index]`. When branching back, we simply overwrite `buffer[index]` without calling `.removeLast()`.
-3. At the leaf nodes, `String.fromCharCodes(buffer)` produces a clean ASCII string directly from native memory.
+3. At the leaf nodes, `String.fromCharCodes(buffer)` produces a clean string directly from standard `dart:core` without needing any external imports.
 
 ```dart
-import 'dart:typed_data';
-
 class Solution {
   List<String> generateParenthesis(int n) {
     final List<String> result = [];
-    // Pre-allocated contiguous byte buffer of fixed length 2 * n.
+    // Pre-allocated contiguous code-unit buffer of fixed length 2 * n.
     // Eliminates intermediate object allocations during recursion.
-    final Uint8List buffer = Uint8List(2 * n);
+    final List<int> buffer = List<int>.filled(2 * n, 0);
     const int openParen = 40;  // ASCII code for '('
     const int closeParen = 41; // ASCII code for ')'
 

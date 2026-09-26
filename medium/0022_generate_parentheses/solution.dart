@@ -1,15 +1,14 @@
-import 'dart:typed_data';
-
 // LeetCode 0022: Generate Parentheses
-// Optimal Solution: Backtracking with Invariant Constraints & Pre-Allocated Byte Buffer
+// Optimal Solution: Backtracking with Invariant Constraints & Pre-Allocated Character Buffer
 // Time Complexity: O(4^n / sqrt(n)) ~ O(C_n) | Space Complexity: O(n) Auxiliary Space
 
 class Solution {
   List<String> generateParenthesis(int n) {
     final List<String> result = [];
-    // Pre-allocated contiguous byte buffer of fixed length 2 * n.
-    // Eliminates intermediate object allocations during recursion.
-    final Uint8List buffer = Uint8List(2 * n);
+    // Pre-allocated contiguous code-unit buffer of fixed length 2 * n.
+    // Eliminates intermediate string concatenations during recursion
+    // and works out of the box on LeetCode without external imports.
+    final List<int> buffer = List<int>.filled(2 * n, 0);
     const int openParen = 40;  // ASCII code for '('
     const int closeParen = 41; // ASCII code for ')'
 
