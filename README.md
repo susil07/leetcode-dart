@@ -9,9 +9,9 @@ A collection of my **LeetCode** solutions written in **Dart** to improve Data St
 | Difficulty | Solved |
 | :--------- | -----: |
 | 🟢 Easy    | 44 |
-| 🟡 Medium  | 12 |
+| 🟡 Medium  | 13 |
 | 🔴 Hard    | 0 |
-| **Total**  | **56** |
+| **Total**  | **57** |
 
 ---
 
