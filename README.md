@@ -8,10 +8,10 @@ A collection of my **LeetCode** solutions written in **Dart** to improve Data St
 
 | Difficulty | Solved |
 | :--------- | -----: |
-| 🟢 Easy    | 46|
+| 🟢 Easy    | 46 |
 | 🟡 Medium  | 25 |
 | 🔴 Hard    | 0 |
-| **Total**  | **68** |
+| **Total**  | **71** |
 
 ---
 
