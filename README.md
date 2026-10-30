@@ -9,9 +9,9 @@ A collection of my **LeetCode** solutions written in **Dart** to improve Data St
 | Difficulty | Solved |
 | :--------- | -----: |
 | 🟢 Easy    | 46 |
-| 🟡 Medium  | 30 |
+| 🟡 Medium  | 31 |
 | 🔴 Hard    | 0 |
-| **Total**  | **76** |
+| **Total**  | **77** |
 
 ---
 
@@ -42,7 +42,7 @@ leetcode-dart/
 - [ ] Graphs
 - [ ] Heap / Priority Queue
 - [x] Backtracking
-- [ ] Dynamic Programming
+- [x] Dynamic Programming
 
 ---
 
